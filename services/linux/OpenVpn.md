@@ -24,7 +24,7 @@ source vars
 ./build-key-server $servername
 ./build-dh
 cd keys/
-cp servername.crt servername.key ca.crt dh1024.pem /etc/openvpn/
+cp $servername.crt $servername.key ca.crt dh1024.pem /etc/openvpn/
 ```
 
 6. Build client certificates with these commands

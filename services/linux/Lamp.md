@@ -24,8 +24,8 @@ chmod -R 775 /var/www/sites
 
 7. Add users with these commands
 ```
-useradd john -g www-data -p newpassword
-passwd john
+useradd $userName -g www-data -p $newPassword
+passwd $userName
 ```
 
 8. Add firewall from this git iptables/lampsecurity

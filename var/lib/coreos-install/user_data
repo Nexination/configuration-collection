@@ -2,7 +2,7 @@
 
 hostname: node01
 ssh_authorized_keys:
-  - ssh-rsa yoursshkeyhere
+  - ssh-rsa $yourSshKeyHere
 coreos:
   units:
     - name: etcd.service
@@ -11,6 +11,6 @@ coreos:
       command: start
   etcd:
     name: node01
-    discovery: yourdiscoveryurl
+    discovery: $yourDiscoveryUrlHere
     addr: 192.168.1.10:4001
     peer-addr: 192.168.1.10:7001
