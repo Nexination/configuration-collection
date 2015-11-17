@@ -1,0 +1,18 @@
+server {
+	server_name *.yourservername.com;
+	return 301 $scheme://yourservername.com$request_uri;
+}
+server {
+        listen 80;
+        server_name yourservername.com;
+        root /var/www;
+	
+	index index.php;
+
+	include global/restrictions.conf;
+
+	# Additional rules go here.
+
+	# Only include one of the files below.
+	include global/wordpress.conf;
+}

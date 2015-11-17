@@ -1,0 +1,45 @@
+#!/bin/bash
+iptables -t nat -F
+iptables -F
+echo Least Secure
+security="ACCEPT"
+iptables -P INPUT $security
+iptables -P OUTPUT $security
+iptables -P FORWARD $security
+iptables -t nat -P POSTROUTING ACCEPT
+iptables -t nat -P PREROUTING ACCEPT
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+#iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to 192.168.3.100
+#echo PING-FW
+#iptables -A INPUT -p icmp -s 0/0 -d 192.168.3.100/32 -j ACCEPT
+#iptables -A OUTPUT -p icmp -s 192.168.3.100/32 -j ACCEPT
+#echo PING-VLAN 0-31
+#iptables -A FORWARD -p icmp -s 192.168.0.0/19 -d 0/0 -j ACCEPT
+#iptables -A FORWARD -p icmp -s 0/0 -d 192.168.0.0/19 -j ACCEPT
+#echo SSH IN/OUT
+#iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+#iptables -A INPUT -p tcp --sport 22 -j ACCEPT
+#iptables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+#iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
+#echo FORWARD HTTP TO SERVER
+#iptables -A FORWARD -p tcp --sport 80 -j ACCEPT
+#iptables -A FORWARD -p tcp --dport 80 -j ACCEPT
+#iptables -t nat -A PREROUTING -p tcp -d 192.168.3.100 --dport 80 -j DNAT --to 192.168.5.110
+#echo FORWARD HTTPS TO SERVER
+#iptables -A FORWARD -p tcp --dport 443 -j ACCEPT
+#iptables -A FORWARD -p tcp --sport 443 -j ACCEPT
+#iptables -t nat -A PREROUTING -p tcp -d 192.168.3.100 --dport 443 -j DNAT --to 192.168.5.110
+#echo FORWARD FTP TO SERVER
+#iptables -A FORWARD -p tcp --dport 20:21 -j ACCEPT
+#iptables -A FORWARD -p tcp --sport 20:21 -j ACCEPT
+#iptables -t nat -A PREROUTING -p tcp -i eth0 --dport 20:21 -j DNAT --to 192.168.5.110
+#echo FORWARD AND ALLOW DNS
+#iptables -A INPUT -p udp --sport 53 -j ACCEPT
+#iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+#iptables -A FORWARD -p udp --dport 53 -j ACCEPT
+#iptables -A FORWARD -p udp --sport 53 -j ACCEPT
+#echo TELNET IN/OUT
+#iptables -A INPUT -p tcp --sport 23 -j ACCEPT
+#iptables -A INPUT -p tcp --dport 23 -j ACCEPT
+#iptables -A OUTPUT -p tcp --sport 23 -j ACCEPT
+#iptables -A OUTPUT -p tcp --dport 23 -j ACCEPT

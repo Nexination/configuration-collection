@@ -1,0 +1,77 @@
+﻿server {
+        listen 80;
+        listen [::]:80 default_server ipv6only=on;
+
+        gzip_static on;
+
+        root /var/www;
+        index index.html index.htm;
+
+        # Make site accessible from http://localhost/
+        server_name localhost;
+
+        location / {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ @sendtophp;
+                # Uncomment to enable naxsi on this location
+                # include /etc/nginx/naxsi.rules
+        }
+        location @sendtophp {
+                # You have 2 options here
+                # For D7 and above:
+                # Clean URLs are handled in drupal_environment_initialize().
+                rewrite ^ /index.php;
+                # For Drupal 6 and bwlow:
+                # Some modules enforce no slash (/) at the end of the URL
+                # Else this rewrite block wouldn't be needed (GlobalRedirect)
+                #rewrite ^/(.*)$ /index.php?q=$1;
+        }
+        location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name
+;
+                fastcgi_param HTTPS off;
+                fastcgi_intercept_errors on;
+                fastcgi_pass unix:/var/run/php5fpm.sock;
+        }
+        location = /favicon.ico {
+                log_not_found off;
+                access_log off;
+        }
+        location ~ ^/sites/.*/files/styles/ {
+                try_files $uri @rewrite;
+        }
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+                expires max;
+                log_not_found off;
+        }
+        location = /robots.txt {
+                allow all;
+                log_not_found off;
+                access_log off;
+        }
+        location ~* \.(txt|log)$ {
+                allow 192.168.0.0/16;
+                deny all;
+        }
+
+        location ~ \..*/.*\.php$ {
+                return 403;
+        }
+        # No no for private
+        location ~ ^/sites/.*/private/ {
+                return 403;
+        }
+
+        # Block access to "hidden" files and directories whose names begin with
+a
+        # period. This includes directories used by version control systems such
+        # as Subversion or Git to store control files.
+        location ~ (^|/)\. {
+                return 403;
+        }
+
+}
