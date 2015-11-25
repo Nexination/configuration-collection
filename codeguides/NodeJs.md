@@ -53,6 +53,10 @@ Also any files in the lib folder can be automatically used by using [require](ht
 
 Using [environment variables](https://nodejs.org/api/process.html) between nodes can be a quick and efficient way for nodes to inform and share configs.
 
+NodeJS is single threaded, therefore it can be a great advantage to use [clustering](https://nodejs.org/api/cluster.html), if you want to be able to use multiple cores/threads.
+
+Any talk of NodeJS memory limits are no longer relevant, you can define exactly how much ram you want to allow by using the above "optimise garbage collector" (default limit is 1.7GB for 64-bit and 1GB for 32-bit).
+
 ## Guidelines to keep you out of trouble
 
 ### File formatting
