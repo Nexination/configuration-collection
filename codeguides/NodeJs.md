@@ -71,7 +71,7 @@ Also all naming should make sense, so one should be able to read from a function
 To note, all letters have to be ASCII compatible.
 
 **Variables and constants:**
-*Constant:* NEWNODEMODLE
+*Constant:* NEWNODEMODULE
 Use "const" to define a constant
 These are constant and can not be changed, trying to change them will cause a crash/error.
 
@@ -80,7 +80,7 @@ Use "var" to create a variable that has a scope to nearest function
 Use "let" to create a variable that has a scope to neares block, statement, or expression
 These are varying as the name suggests and can be used to contain changing data.
 
-Variables can basically contain anything in JS, but most commonly is used for 3 different types:
+Variables can basically contain anything in JS, but most commonly is used for 6 different types:
 * Integers - Should always be written without anything surrounding it
 * Strings - Should always be written in single quotes
 * Objects - Should always be filled with double quotes, this includes indexes
