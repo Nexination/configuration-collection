@@ -38,6 +38,8 @@ npm adduser
 npm publish
 ```
 
+If you want to package your app as a single executable or for mobiles, [JXCore](http://jxcore.com/home/) can be recommended.
+
 ## Good to know about NodeJS
 You can optimise your node garbage collector to run more lean like this:
 ```
