@@ -109,6 +109,7 @@ Whenever this method is used whatever is used to split up the statement should b
 In this case it is comma(,) and plus(+), it makes them a lot easier to copy and also easier to spot forgotten ones.
 
 **Methods(functions) and classes:**
+
 *Methods:* newNodeModule
 Functions are the base of all repetitive behaviour and look like this:
 ```
@@ -199,4 +200,4 @@ Mainly just use the scheme where you can convey the most data, with spending the
 * Do use objects instead of multiple if() statements, they make it easier to get an overview and they are a lot faster.
 * Do always remove any alert() and console.log() statements, once you are done using them.
 * Do use triple equals (===) whenever possible, as it ensures better statement accuracy.
-* Do use setTimeout('newFunction();', 1000); correctly, with functions always encased as a string, to avoid error.
+* Do use setTimeout(newFunction, 1000); correctly, with functions always as a direct reference without the brackets, to avoid error.

@@ -99,16 +99,17 @@ newArray = [
     , true
     , []
 ];
-// String example
-example = 'This is an examples of'
-    + 'how strings should'
-    + 'be composed in'
-    + 'proper format.';
+// String example, in ES6 we can do these without using + for each line, called prototype strings
+example = `This is an examples of
+    how strings should
+    be composed in
+    proper format.`;
 ```
 Whenever this method is used whatever is used to split up the statement should be a precursor on the lines.
 In this case it is comma(,) and plus(+), it makes them a lot easier to copy and also easier to spot forgotten ones.
 
 **Methods(functions) and classes:**
+
 *Methods:* newNodeModule
 Functions are the base of all repetitive behaviour and look like this:
 ```
@@ -127,32 +128,34 @@ var newString = 'Stuff' + function newFunction() {return 5 + 5;};
 ```
 
 *Classes:* NewNodeModule
-Classes are essentially wrapper functions, as everything in JS are objects functions can contain other functions and data.
-What is really special is the different ways a function can be instantiated as a "class":
+Classes have been greatly improved in ES6 and now almost resemble real classes, these were introduced with the merge of NodeJS and io.js so they are available.
+Classes support prototype-based inheritance, super calls, instance and static methods and constructors.
 ```
-// Object literal version, can't use "private" variables inside it
-var NewNodeModule = {
-    "publicFunction": function() {
-        
-    }
-};
-// Singleton version, an already instantiated "class" can be useful for generic operations
-var NewNodeModule = new function() {
-    var privateVariable;
-    this.publicFunction = function() {
-        
-    };
-};
-// Basic function version, can be very useful when using prototyping,
-// as all functions using this will inherit from the prototype
-var NewNodeModule = function() {
-    var privateVariable;
-    this.publicFunction = function() {
-        
-    };
-};
-var nnm = new NewNodeModule();
+class SkinnedMesh extends THREE.Mesh {
+  constructor(geometry, materials) {
+    super(geometry, materials);
+
+    this.idMatrix = SkinnedMesh.defaultMatrix();
+    this.bones = [];
+    this.boneMatrices = [];
+    //...
+  }
+  update(camera) {
+    //...
+    super.update();
+  }
+  get boneCount() {
+    return this.bones.length;
+  }
+  set matrixType(matrixType) {
+    this.idMatrix = SkinnedMesh[matrixType]();
+  }
+  static defaultMatrix() {
+    return new THREE.Matrix4();
+  }
+}
 ```
+Thanks to [Luke Hoban](https://github.com/lukehoban/es6features) for this example, please go there to read more about ES6.
 
 ### JSON (JavaScrip Object Notation) or just JS objects
 Only important things to remember with these is that opposed to the normal standard of writing with single quotes,
@@ -173,6 +176,7 @@ The reason for this is that if you do not, you can end up with some really pecul
 For has a double functionality to accommodate objects and arrays and are most effective if used properly.
 The “incremental for” loop is used to iterate arrays or other numbered data points and is the fastest loop, so when at all possible, utilize this loop type.
 The “for in” loop is used to iterate over objects and is very effective and easy to use with objects or object like data, like column names in a database array.
+In ES6 we also have the "for of" loop, which is incredibly useful because it doesn't require realizing the array and allows for lazy design patterns.
 
 **While:**
 While is only to be used with true/false statements, where a loop is need to run until a certain action happens and the variable is set to false to stop the loop from running.
@@ -186,7 +190,6 @@ Mainly just use the scheme where you can convey the most data, with spending the
 * Don’t under any circumstances use any sort of browser detection to base any coding decisions upon. Instead, checking if a function is there or not can be used and then used accordingly.
 * Don’t use this outside of classes, if you are looking for a way to send a source element to a function, look up event and learn how to use it.
 * Don’t use non-standard Javascript features under any circumstances, the single exception is if there is no other way to do it, and then only to make a polyfil to fix missing functionality.
-* Don’t use any framework that has not been explicitly allowed in this document, with the exception of Vanilla JS.
 * Don’t ever use i++ to increment, always use i += 1, it makes changing it easier and prevents a very nasty forever loop bug some Javascript implementations have.
 * Don’t use regex for every single search, indexOf/lastIndexOf and substr can be used in most cases and does the job a lot faster.
 * Don’t under any circumstances use eval(), not even to parse JSON.
@@ -199,4 +202,4 @@ Mainly just use the scheme where you can convey the most data, with spending the
 * Do use objects instead of multiple if() statements, they make it easier to get an overview and they are a lot faster.
 * Do always remove any alert() and console.log() statements, once you are done using them.
 * Do use triple equals (===) whenever possible, as it ensures better statement accuracy.
-* Do use setTimeout('newFunction();', 1000); correctly, with functions always encased as a string, to avoid error.
+* Do use setTimeout(newFunction, 1000); correctly, with functions always as a direct reference without the brackets, to avoid error.
