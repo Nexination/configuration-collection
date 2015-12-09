@@ -4,6 +4,7 @@
 Always start all new NodeJS with "npm init --yes" to generate the package.json file.
 
 You can add a number of things to this file to make your job easier.
+
 Two of the more important ones are to specific what version of node you made this for and if you are using a repository.
 [package.json](https://docs.npmjs.com/files/package.json)
 ```
@@ -63,23 +64,32 @@ Any talk of NodeJS memory limits are no longer relevant, you can define exactly 
 
 ### File formatting
 You should aim to keep indentation to 2 spaces (like NodeJS itself does) or 4 spaces, no tabs.
+
 Your line termination and character encoding should always be LF(line feed, UNIX standard) and UTF8(Unicode).
+
 Always use lowercase filenames, or they can be hard to keep track of and/or host on linux systems.
 
-### Variables, constants, methods(functions) and "classes"
+### Variables, constants, methods(functions) and classes
 All of these follow camel case convention, first word in all small letters all subesquent words with a big starting letter, the rest small.
+
 There are a few caveats to this though, "classes" also start with a capital letter and constants are written in ALL capital letters to stand out.
+
 Also all naming should make sense, so one should be able to read from a function or variable what it does (try not to shorten things).
 To note, all letters have to be ASCII compatible.
 
 **Variables and constants:**
 *Constant:* NEWNODEMODULE
+
 Use "const" to define a constant
+
 These are constant and can not be changed, trying to change them will cause a crash/error.
 
 *Variable:* newNodeModule
+
 Use "var" to create a variable that has a scope to nearest function
+
 Use "let" to create a variable that has a scope to neares block, statement, or expression
+
 These are varying as the name suggests and can be used to contain changing data.
 
 Variables can basically contain anything in JS, but most commonly is used for 6 different types:
@@ -106,11 +116,13 @@ example = `This is an examples of
     proper format.`;
 ```
 Whenever this method is used whatever is used to split up the statement should be a precursor on the lines.
+
 In this case it is comma(,) and plus(+), it makes them a lot easier to copy and also easier to spot forgotten ones.
 
 **Methods(functions) and classes:**
 
 *Methods:* newNodeModule
+
 Functions are the base of all repetitive behaviour and look like this:
 ```
 var newNodeModule = function() {
@@ -128,7 +140,9 @@ var newString = 'Stuff' + function newFunction() {return 5 + 5;};
 ```
 
 *Classes:* NewNodeModule
+
 Classes have been greatly improved in ES6 and now almost resemble real classes, these were introduced with the merge of NodeJS and io.js so they are available.
+
 Classes support prototype-based inheritance, super calls, instance and static methods and constructors.
 ```
 class SkinnedMesh extends THREE.Mesh {
@@ -169,20 +183,26 @@ var newJson = {
 
 ### Semicolons
 These are in fact so important they get they own section, ALWAYS ALWAYS ALWAYS use semicolons to end all blocks, statements or expressions.
+
 The reason for this is that if you do not, you can end up with some really peculiar errors, that can take you a long time to fix.
 
 ### Correct use of loops
 **For:**
 For has a double functionality to accommodate objects and arrays and are most effective if used properly.
+
 The “incremental for” loop is used to iterate arrays or other numbered data points and is the fastest loop, so when at all possible, utilize this loop type.
+
 The “for in” loop is used to iterate over objects and is very effective and easy to use with objects or object like data, like column names in a database array.
+
 In ES6 we also have the "for of" loop, which is incredibly useful because it doesn't require realizing the array and allows for lazy design patterns.
 
 **While:**
+
 While is only to be used with true/false statements, where a loop is need to run until a certain action happens and the variable is set to false to stop the loop from running.
 
 ### Data handeling
 This should preferrably use some sort of API scheme, currently the hottest trend is RESTful, so it is suggested to use this.
+
 Mainly just use the scheme where you can convey the most data, with spending the least possible amount of bandwidth.
 
 ## Do's and Don'ts
