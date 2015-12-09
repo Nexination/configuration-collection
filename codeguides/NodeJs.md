@@ -195,6 +195,7 @@ Mainly just use the scheme where you can convey the most data, with spending the
 * Don’t under any circumstances use eval(), not even to parse JSON.
 * Don’t under any circumstances construct functions inside blocks.
 * Don’t under any circumstances change the style attribute of elements, use classes instead, rare exceptions can be used when doing iterating changes.
+* Don't use setInterval, it means you are lazy and it means you open up yourself to memory leaks.
 
 **Do’s:**
 * Do use null to empty variables that does not have a specific function for doing so already.
