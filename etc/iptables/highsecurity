@@ -1,95 +1,63 @@
 #!/bin/bash
-#Initial flush to clear iptables and total lockdown by dropping everything
-iptables -F
-iptables -P INPUT DROP
-iptables -P OUTPUT DROP
- 
-#Flushes nat, and locks down all forwarding
+# SECTION: Global settings
+# Flush previous configuration
 iptables -t nat -F
-iptables -P FORWARD DROP
- 
-#Allows source natting(post) and destination natting(pre)
-iptables -t nat -P POSTROUTING ACCEPT
-iptables -t nat -P PREROUTING ACCEPT
- 
-#NAT's outgoing traffic to the server/router ip and sends it to eth0
-iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to 10.14.15.216
- 
-#NAT's outgoing http traffic to run on port 3128/proxy server
-iptables -t nat -A PREROUTING -i eth1 -p tcp -d ! 192.168.10.0/24 --dport 80 -j
-REDIRECT --to-port 3128
-#Input output rules, to make squid available to the internet and back
-iptables -A INPUT -i eth0 -p tcp --sport 80 -j ACCEPT
-iptables -A OUTPUT -o eth0 -p tcp --dport 80 -j ACCEPT
-#Input output rules, to make squid available to the LAN and back
-iptables -A INPUT -i eth1 -p tcp --dport 3128 -j ACCEPT
-iptables -A OUTPUT -o eth1 -p tcp --sport 3128 -j ACCEPT
- 
-#NAT's ingoing traffic so the ftp can be accessed externally
-iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 21 -j DNAT --to 192.168.10.
-2
-#Forward ftp traffic, needed for the PREROUTING to work properly
-iptables -A FORWARD -p tcp -s 0/0 --sport 1024: -d 192.168.10.2 --dport 21 -j AC
-CEPT
-iptables -A FORWARD -p tcp -d 0/0 --dport 1024: -s 192.168.10.2 --sport 21 -j AC
-CEPT
- 
-#NAT's ingoing traffic so the http can be accessed externally
-iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to 192.168.10.
-2
-#Forward http traffic, needed for the PREROUTING to work properly
-iptables -A FORWARD -p tcp -s 0/0 --sport 1024: -d 192.168.10.2 --dport 80 -j AC
-CEPT
-iptables -A FORWARD -p tcp -d 0/0 --dport 1024: -s 192.168.10.2 --sport 80 -j AC
-CEPT
- 
-#YUM ftp allowances
-iptables -A OUTPUT -p tcp --dport 21 -j ACCEPT
-iptables -A INPUT -p tcp --sport 21 -j ACCEPT
-iptables -A FORWARD -p tcp --dport 21 -j ACCEPT
-iptables -A FORWARD -p tcp --sport 21 -j ACCEPT
- 
-#Allow all ping
-iptables -A INPUT -p icmp -j ACCEPT
-iptables -A OUTPUT -p icmp -j ACCEPT
-iptables -A FORWARD -p icmp -j ACCEPT
- 
-#Allow all traffic on loopback interface on localhost, needed for x to start
+iptables -F
+
+# Set system to most secure and drop any packets that is not explicitly allowed
+security="DROP"
+iptables -P INPUT $security
+iptables -P OUTPUT $security
+iptables -P FORWARD $security
+
+# SECTION: General protection
+# Allow previously established connections
+iptables -A INPUT -m state –state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow all localhost requests
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
- 
-#Allow port 22, incoming ssh connections
+
+# Enabled logging of dropped packets
+iptables -N LOGDROP
+iptables -A logdrop -J LOG
+iptables -A logdrop -J DROP
+
+# Drop SYN flood and fragmented packages
+iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+iptables -A INPUT -p tcp –syn -m limit –limit 1/s –limit-burst 4 -j ACCEPT
+iptables -A INPUT -p tcp –syn -j DROP
+iptables -A INPUT -f -j DROP
+
+# Drop port scans
+iptables -N port-scan
+iptables -A port-scan -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j RETURN
+iptables -A port-scan -j DROP
+
+# SECTION: Specifically allowed services
+# Allow SSH connections in and out of the server
 iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
- 
-#Allow port 22, outgoing ssh connections
 iptables -A INPUT -p tcp --sport 22 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 22 -j ACCEPT
- 
-#Forward dns traffic on LAN and to internet
-iptables -A FORWARD -p udp --dport 53 -j ACCEPT
-iptables -A FORWARD -p udp --sport 53 -j ACCEPT
-iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
+
+# Allow DNS traffic outbound
 iptables -A INPUT -p udp --sport 53 -j ACCEPT
- 
-#Forward http traffic on LAN and to internet
-iptables -A FORWARD -p tcp --dport 80 -j ACCEPT
-iptables -A FORWARD -p tcp --sport 80 -j ACCEPT
- 
-#Forward lpd traffic on LAN and to internet
-iptables -A FORWARD -p tcp --dport 515 -j ACCEPT
-iptables -A FORWARD -p tcp --sport 515 -j ACCEPT
- 
-#DHCP ports
-iptables -A FORWARD -p tcp -o ! eth0 -m multiport --dport 67,68 -j ACCEPT
-iptables -A FORWARD -p tcp -i ! eth0 -m multiport --sport 67,68 -j ACCEPT
- 
-#Forward Domain Controller traffic on LAN but not on WAN
-iptables -A FORWARD -p tcp -o ! eth0 -m multiport --dport 139,445 -j ACCEPT
-iptables -A FORWARD -p tcp -i ! eth0 -m multiport --sport 139,445 -j ACCEPT
-iptables -A FORWARD -p udp -o ! eth0 -m multiport --dport 137,138 -j ACCEPT
-iptables -A FORWARD -p udp -i ! eth0 -m multiport --sport 137,138 -j ACCEPT
- 
-#Forward jet direct printing traffic on LAN and to internet
-iptables -A FORWARD -p tcp --dport 9100 -j ACCEPT
-iptables -A FORWARD -p tcp --sport 9100:9102 -j ACCEPT
+iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+
+# Allow HTTP and HTTPS inbound and outbound
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 80 -j ACCEPT
+iptables -A INPUT -p tcp --sport 80 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 443 -j ACCEPT
+iptables -A INPUT -p tcp --sport 443 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+
+# Allow SMTP for gmail outbound
+iptables -A INPUT -p tcp --sport 465 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 465 -j ACCEPT
+
+
+# Permanently save the firewall rules
