@@ -7,7 +7,7 @@ sysctl -w net.ipv4.ip_forward=1
 
 3. Copy paste a firewall script from this git into console
 
-a. Save the configuration to file
+	1. Save the configuration to file
 ```
 iptables-save -c > /etc/iptables/firewall
 ```
@@ -19,7 +19,7 @@ iptables-restore < /etc/iptables/firewall
 exit 0
 ```
 
-a. Optionally add a script to also save the running iptables configuration on shutdown in /etc/network/if-post-down.d/iptablessave
+	1. Optionally add a script to also save the running iptables configuration on shutdown in /etc/network/if-post-down.d/iptablessave
 ```
 #!/bin/sh
 iptables-save -c > /etc/iptables/firewall
