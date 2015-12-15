@@ -6,6 +6,7 @@ sysctl -w net.ipv4.ip_forward=1
 2. Install DNSMasq from the instructions on this git
 
 3. Copy paste a firewall script from this git into console
+
 3a. Save the configuration to file
 ```
 iptables-save -c > /etc/iptables/firewall
