@@ -1,0 +1,6 @@
+#!/bin/bash
+wget https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz -O sync.tar.gz --no-check-certificate
+pkill btsync
+tar zxvf sync.tar.gz btsync
+sleep 3
+./btsync --webui.listen 0.0.0.0:8888
