@@ -28,4 +28,4 @@ useradd $userName -g www-data -p $newPassword
 passwd $userName
 ```
 
-8. Add firewall from this git iptables/lampsecurity
+8. Add firewall from this git iptables/highsecurity

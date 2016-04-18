@@ -16,3 +16,10 @@ Environment variables can also be set for current session with the "export" comm
 export NODE_PATH=/home/node/lib/node_modules
 cd $NODE_PATH
 ```
+
+It is also possible on some systems to just add these through an environment profile like the Ubuntu .profile.
+```
+PATH=$PATH:/home/nexus/node/bin
+export PATH
+export NODE_PATH=/home/node/lib/node_modules
+```
