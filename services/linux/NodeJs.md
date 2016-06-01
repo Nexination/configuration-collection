@@ -19,7 +19,8 @@ cd $NODE_PATH
 
 It is also possible on some systems to just add these through an environment profile like the Ubuntu .profile.
 ```
-PATH=$PATH:/home/nexus/node/bin
-export PATH
-export NODE_PATH=/home/node/lib/node_modules
+NODE_VERSION=node-v6.2.0
+
+export PATH=$PATH:/home/node/$NODE_VERSION/bin
+export NODE_PATH=/home/node/$NODE_VERSION/lib/node_modules
 ```
