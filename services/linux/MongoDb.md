@@ -1,8 +1,8 @@
 # MongoDB
-1. Install mongodb
+1: Install mongodb
 Download it from the site in a zip or install via package manager
 
-1b. Create a script
+1b: Create a script
 If downloaded as zip, use the following script to make it run:
 ```
 #!/bin/bash
@@ -23,7 +23,8 @@ elif [ "$1" == "restart" ]; then
 fi
 ```
 
-2. Create your config file
+2: Create your config file
+
 mongod.conf:
 ```
 processManagement:
@@ -42,4 +43,4 @@ storage:
       enabled: true
 ```
 
-3. Start up the server and you are good to go
+3: Start up the server and you are good to go
