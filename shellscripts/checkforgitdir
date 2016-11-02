@@ -1,9 +1,14 @@
 #!/bin/bash
 
-for gitdir in `find ./ -name .git`; 
-    do 
-        workdir=${gitdir%/*}; 
-        echo; 
-        echo $workdir; 
-        git --git-dir=$gitdir --work-tree=$workdir status; 
+for gitdir in `find ./ -name .git`;
+    do
+        workdir=${gitdir%/*};
+        echo;
+        echo $workdir;
+        git --git-dir=$gitdir --work-tree=$workdir status;
+        #git --git-dir=$gitdir pull;
+        #git --git-dir=$gitdir config core.filemode false;
+        #git --git-dir=$gitdir config user.name "John Doe";
+        #git --git-dir=$gitdir config user.email john@example.com;
+        #git --git-dir=$gitdir config push.default simple;
     done
