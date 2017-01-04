@@ -1,0 +1,31 @@
+#!/bin/bash
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR/$1/
+PIDF="processid"
+SCRIPT='server.js'
+start () {
+    if [ -f $PIDF ]; then
+        echo "Already running"
+    else
+        echo "Starting..."
+        node $SCRIPT > log 2>&1 &
+        echo $! > $PIDF
+    fi
+}
+stop () {
+    if [ -f processid ]; then
+        echo "Stopping..."
+        kill $(<"$PIDF")
+        rm $PIDF
+    else
+        echo "Already stopped"
+    fi
+}
+if [ "$2" == "start" ]; then
+    start
+elif [ "$2" == "stop" ]; then
+    stop
+elif [ "$2" == "restart" ]; then
+    stop
+    start
+fi
