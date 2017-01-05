@@ -46,6 +46,8 @@ alias -p mypj='cd /mnt/c/projects'
 ```
 *Note:* All of your Windows drives are pre-mounted in the /mnt folder.
 
+You can now type ```mypj``` and it will execute the command outline by alias.
+
 Alias unfortunately gets deleted after you close a session, to make it auto run on every log in, add it to the ".profile" or ".bashrc" files in your home directory.
 
 ## Getting SSH to work
