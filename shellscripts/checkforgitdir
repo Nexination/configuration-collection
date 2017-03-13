@@ -5,7 +5,7 @@ for gitdir in `find ./ -name .git`;
         workdir=${gitdir%/*};
         echo;
         echo $workdir;
-        git --git-dir=$gitdir --work-tree=$workdir status;
+        git --git-dir=$gitdir --work-tree=$workdir status -s;
         #git --git-dir=$gitdir pull;
         #git --git-dir=$gitdir config core.filemode false;
         #git --git-dir=$gitdir config user.name "John Doe";
