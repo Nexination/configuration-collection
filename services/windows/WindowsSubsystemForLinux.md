@@ -1,7 +1,7 @@
 # How to install Windows Subsystem for Linux (WSL)
 Be aware that WSL only works on Windows 10 Pro and up and ONLY if it has the Fall Creators Update (Version 1609).
 
-With Ubuntu/Linux being added to the Windows Store, this process has been made a lot simpler and a lot of bugs have been fixed. On top of that, do read the description for your flavour of Linux, as there are a few steps needed to make it work.
+With Ubuntu/Linux being added to the Windows Store, this process has been made a lot simpler and a lot of bugs have been fixed. On top of that, do read the description on the Windows Store for your flavour of Linux, as there are a few steps needed to make it work.
 
 To set this up with the old method, look into the Git history of this file.
 
