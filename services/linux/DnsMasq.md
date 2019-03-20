@@ -1,25 +1,41 @@
 # DNSMasq
 
-1. Copy /etc/dnsmasq.conf from this git onto your server and modify it
+## Set static ip
 
-2. Set up network interface in /etc/network/interfaces
+In /etc/netplan/*
 ```
-# Set up interface with dhcp
-auto eth0
-iface eth0 inet dhcp
+# /etc/netplan/50-cloud-init.yaml
+network:
+    ethernets:
+        enp2s0:
+            addresses: [192.168.1.254/24]
+            gateway4: 192.168.1.1
+            nameservers:
+                search: [wt]
+                addresses: [192.168.1.254,1.1.1.1,1.0.0.1]
+            dhcp4: no
+            dhcp6: no
+            optional: true
+        lo:
+            nameservers:
+                search: [wt]
+                addresses: [192.168.1.254,1.1.1.1,1.0.0.1]
+    version: 2
 
-# Set up interface with static address
-auto eth0
-iface eth0 inet static
-        address 192.168.111.254
-        netmask 255.255.255.0
-        gateway 192.168.111.1 # Needed for static interface only
-        network 192.168.111.0 # Needed for gateway interface
-        broadcast 192.168.111.255 # Needed for gateway interface
 ```
 
-Important files:
-/var/run/network/ifstate - Shows interface states, for use with ifup/ifdown
+Then run ```netplan apply```
+
+## Set up DNSMasq
+
+* Run ```apt install -y dnsmasq```
+
+* Copy [/etc/dnsmasq.conf](https://github.com/Nexination/configuration-collection/raw/master/etc/dnsmasq.conf) from this git onto your server /etc and modify it to your needs/network
+
+* Run ```systemctl restart dnsmasq```
+
+## Important files
+
 /var/lib/misc/dnsmasq.leases - Shows all dhcp leases
-/etc/hosts - Mark static ip services down here
-/etc/resolvconf/resolv.conf.d/ - Edit tail/head here to add nameservers to the front or end of resolv.conf, do resolvconf -u to update the config
+
+/etc/hosts - Mark static services down here
