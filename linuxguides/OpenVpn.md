@@ -18,6 +18,7 @@ Generate rsa key authority with these commands
 
 ```
 cd /etc/openvpn/easy-rsa/
+cp openssl-1.0.0.cnf openssl.cnf
 source vars
 ./clean-all
 ./build-ca
