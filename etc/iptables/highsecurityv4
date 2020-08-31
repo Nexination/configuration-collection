@@ -34,6 +34,12 @@ iptables -A INPUT -p tcp --sport 22 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 22 -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
 
+# Allow Gaming Service
+iptables -A INPUT -p tcp --dport 1502 -j ACCEPT
+iptables -A INPUT -p tcp --sport 1502 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 1502 -j ACCEPT
+iptables -A OUTPUT -p tcp --sport 1502 -j ACCEPT
+
 # Allow DNS traffic outbound
 iptables -A INPUT -p udp --sport 53 -j ACCEPT
 iptables -A OUTPUT -p udp --dport 53 -j ACCEPT

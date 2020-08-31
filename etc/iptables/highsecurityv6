@@ -1,0 +1,59 @@
+# SECTION: Global settings
+# Flush previous configuration
+ip6tables -t nat -F
+ip6tables -F
+ip6tables -Z
+ip6tables -X
+
+# Set system to most secure and drop any packets that is not explicitly allowed
+security="DROP"
+ip6tables -P INPUT $security
+ip6tables -P OUTPUT $security
+ip6tables -P FORWARD $security
+
+# SECTION: General protection
+# Allow previously established connections
+ip6tables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow all localhost requests
+ip6tables -A INPUT -i lo -j ACCEPT
+ip6tables -A OUTPUT -o lo -j ACCEPT
+
+# Drop SYN flood and fragmented packages
+ip6tables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+ip6tables -A INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 4 -j ACCEPT
+ip6tables -A INPUT -p tcp --syn -j DROP
+ip6tables -A INPUT -f -j DROP
+# Drop port scans
+ip6tables -A INPUT -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j DROP
+
+# SECTION: Specifically allowed services
+# Allow SSH connections in and out of the server
+ip6tables -A INPUT -p tcp --dport 22 -j ACCEPT
+ip6tables -A INPUT -p tcp --sport 22 -j ACCEPT
+ip6tables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+ip6tables -A OUTPUT -p tcp --sport 22 -j ACCEPT
+
+# Allow Gaming Service
+ip6tables -A INPUT -p tcp --dport 1502 -j ACCEPT
+ip6tables -A INPUT -p tcp --sport 1502 -j ACCEPT
+ip6tables -A OUTPUT -p tcp --dport 1502 -j ACCEPT
+ip6tables -A OUTPUT -p tcp --sport 1502 -j ACCEPT
+
+# Allow DNS traffic outbound
+ip6tables -A INPUT -p udp --sport 53 -j ACCEPT
+ip6tables -A OUTPUT -p udp --dport 53 -j ACCEPT
+
+# Allow NTP traffic outbound
+ip6tables -A INPUT -p udp --sport 123 -j ACCEPT
+ip6tables -A OUTPUT -p udp --dport 123 -j ACCEPT
+
+# Allow HTTP and HTTPS inbound and outbound
+ip6tables -A INPUT -p tcp --dport 80 -j ACCEPT
+ip6tables -A OUTPUT -p tcp --sport 80 -j ACCEPT
+ip6tables -A INPUT -p tcp --sport 80 -j ACCEPT
+ip6tables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+ip6tables -A INPUT -p tcp --dport 443 -j ACCEPT
+ip6tables -A OUTPUT -p tcp --sport 443 -j ACCEPT
+ip6tables -A INPUT -p tcp --sport 443 -j ACCEPT
+ip6tables -A OUTPUT -p tcp --dport 443 -j ACCEPT
